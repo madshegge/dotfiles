@@ -8,5 +8,6 @@
 	email = 66017942+madshegge@users.noreply.github.com
 [credential]
 	helper = manager
+	credentialStore = secretservice
 [credential "https://dev.azure.com"]
 	useHttpPath = true

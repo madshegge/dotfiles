@@ -13,7 +13,9 @@ This repository contains configuration files for:
 ## Prerequisites
 
 Before installing, ensure you have:
-- macOS (some features are macOS-specific)
+- macOS or Linux (with [Homebrew](https://brew.sh)/Linuxbrew installed) —
+  a few features (e.g. the `aerospace` cask) are macOS-only and are skipped
+  automatically on Linux
 - Git
 - Zsh
 

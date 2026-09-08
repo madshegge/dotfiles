@@ -32,31 +32,37 @@ error() {
     echo -e "${RED}✗${NC} $1"
 }
 
-# Check if running on macOS
+# Check OS
 check_os() {
-    if [[ "$OSTYPE" != "darwin"* ]]; then
-        warning "This script is designed for macOS. Some features may not work on other systems."
+    if [[ "$OSTYPE" != "darwin"* && "$OSTYPE" != "linux-gnu"* ]]; then
+        warning "This script is designed for macOS and Linux (with Homebrew/Linuxbrew). Some features may not work on other systems."
     fi
 }
 
 # Check for required dependencies
 check_dependencies() {
     info "Checking dependencies..."
-    
+
     if ! command -v git &> /dev/null; then
         error "git is not installed. Please install git first."
         exit 1
     fi
-    
+
     if ! command -v zsh &> /dev/null; then
-        error "zsh is not installed. Please install zsh first."
-        exit 1
+        if command -v brew &> /dev/null; then
+            info "zsh not found. Installing via Homebrew..."
+            brew install zsh
+        else
+            error "zsh is not installed. Please install zsh first."
+            exit 1
+        fi
     fi
-    
+
     success "All required dependencies are installed"
 }
 
-# Install Homebrew if not present (macOS only)
+# Install Homebrew if not present (macOS only; Linux users are expected to
+# already have Linuxbrew set up per https://brew.sh)
 install_homebrew() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
         if ! command -v brew &> /dev/null; then
@@ -125,9 +131,10 @@ install_dotfiles() {
     success "All dotfiles installed"
 }
 
-# Install Homebrew packages (optional)
+# Install Homebrew packages (optional; works with Homebrew on macOS or
+# Linuxbrew on Linux)
 install_homebrew_packages() {
-    if [[ "$OSTYPE" == "darwin"* ]] && command -v brew &> /dev/null; then
+    if command -v brew &> /dev/null; then
         local brewfile="$DOTFILES_DIR/homebrew/Brewfile"
         if [[ -f "$brewfile" ]]; then
             read -p "Do you want to install Homebrew packages from Brewfile? (y/N) " -n 1 -r

@@ -7,14 +7,19 @@ fi
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH=$(npm bin --global):$PATH
+command -v npm &> /dev/null && export PATH=$(npm bin --global):$PATH
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-PATH="$PATH:/opt/homebrew/bin/"
-export PATH=$HOME/.npm-global/bin:$PATH
-export PATH=$PATH:`npm bin -g`
+# Homebrew (macOS) or Linuxbrew (Linux), whichever is present
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+command -v npm &> /dev/null && export PATH=$HOME/.npm-global/bin:$PATH
+command -v npm &> /dev/null && export PATH=$PATH:`npm bin -g`
 export PATH="$PATH:$HOME/.yarn/bin"
-eval "$(oh-my-posh init zsh)"
+command -v oh-my-posh &> /dev/null && eval "$(oh-my-posh init zsh)"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -125,7 +130,7 @@ export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
 
-export PIPENV_DEFAULT_PYTHON_VERSION=$(pyenv which python)
+command -v pyenv &> /dev/null && export PIPENV_DEFAULT_PYTHON_VERSION=$(pyenv which python)
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

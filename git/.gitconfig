@@ -7,4 +7,6 @@
 	name = Mads-Henrik Hegge-Olsen
 	email = 66017942+madshegge@users.noreply.github.com
 [credential]
-	helper = manager-core
+	helper = manager
+[credential "https://dev.azure.com"]
+	useHttpPath = true
